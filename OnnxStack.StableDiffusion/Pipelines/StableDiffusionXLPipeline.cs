@@ -46,14 +46,28 @@ namespace OnnxStack.StableDiffusion.Pipelines
                 SchedulerType.DDPM,
                 SchedulerType.KDPM2
             };
-            _defaultSchedulerOptions = defaultSchedulerOptions ?? new SchedulerOptions
+            if (_unet.ModelType == ModelType.Turbo)
             {
-                Width = 1024,
-                Height = 1024,
-                InferenceSteps = 20,
-                GuidanceScale = 5f,
-                SchedulerType = SchedulerType.EulerAncestral
-            };
+                _defaultSchedulerOptions = defaultSchedulerOptions ?? new SchedulerOptions
+                {
+                    Width = 512,
+                    Height = 512,
+                    InferenceSteps = 4,
+                    GuidanceScale = 0f,
+                    SchedulerType = SchedulerType.EulerAncestral
+                };
+            }
+            else
+            {
+                _defaultSchedulerOptions = defaultSchedulerOptions ?? new SchedulerOptions
+                {
+                    Width = 1024,
+                    Height = 1024,
+                    InferenceSteps = 20,
+                    GuidanceScale = 5f,
+                    SchedulerType = SchedulerType.EulerAncestral
+                };
+            }
         }
 
 
@@ -231,6 +245,7 @@ namespace OnnxStack.StableDiffusion.Pipelines
 
             var metadata = await _tokenizer2.GetMetadataAsync();
             var inputTensor = new DenseTensor<string>(new string[] { inputText }, new int[] { 1 });
+            var timestamp = _logger.LogBegin();
             using (var inferenceParameters = new OnnxInferenceParameters(metadata))
             {
                 inferenceParameters.AddInputTensor(inputTensor);
@@ -238,6 +253,7 @@ namespace OnnxStack.StableDiffusion.Pipelines
                 inferenceParameters.AddOutputBuffer();
                 using (var results = _tokenizer.RunInference(inferenceParameters))
                 {
+                    _logger?.LogEnd("_tokenizer ", timestamp);
                     return new TokenizerResult(results[0].ToArray<long>(), results[1].ToArray<long>());
                 }
             }
@@ -253,6 +269,9 @@ namespace OnnxStack.StableDiffusion.Pipelines
         {
             var metadata = await _textEncoder2.GetMetadataAsync();
             var inputTensor = new DenseTensor<long>(tokenizedInput.InputIds, new[] { 1, tokenizedInput.InputIds.Length });
+
+            var timestamp = _logger.LogBegin();
+
             using (var inferenceParameters = new OnnxInferenceParameters(metadata))
             {
                 int hiddenStateIndex = metadata.Outputs.Count - 2;
@@ -266,6 +285,7 @@ namespace OnnxStack.StableDiffusion.Pipelines
                 using (var promptEmbeds = results.Last())
                 using (var promptEmbedsPooled = results.First())
                 {
+                    _logger?.LogEnd("_textEncoder2 ", timestamp);
                     return new EncoderResult(promptEmbeds.ToDenseTensor(), promptEmbedsPooled.ToDenseTensor());
                 }
             }

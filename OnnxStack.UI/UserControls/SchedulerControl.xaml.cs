@@ -139,11 +139,23 @@ namespace OnnxStack.UI.UserControls
             }
             else if (model.ModelSet.PipelineType == DiffuserPipelineType.StableDiffusionXL)
             {
-                SchedulerOptions.OriginalInferenceSteps = 100;
-                SchedulerOptions.InferenceSteps = 30;
-                SchedulerOptions.GuidanceScale = 5f;
-                SchedulerOptions.Width = 1024;
-                SchedulerOptions.Height = 1024;
+                if (model.ModelSet.UnetConfig.ModelType == ModelType.Turbo)
+                {
+                    SchedulerOptions.OriginalInferenceSteps = 100;
+                    SchedulerOptions.InferenceSteps = 4;
+                    SchedulerOptions.GuidanceScale = 0f;
+                    SchedulerOptions.Width = 512;
+                    SchedulerOptions.Height = 512;
+                }
+                else
+                {
+                    SchedulerOptions.OriginalInferenceSteps = 100;
+                    SchedulerOptions.InferenceSteps = 30;
+                    SchedulerOptions.GuidanceScale = 5f;
+                    SchedulerOptions.Width = 1024;
+                    SchedulerOptions.Height = 1024;
+                }
+
                 SchedulerOptions.SchedulerType = SchedulerType.EulerAncestral;
             }
         }

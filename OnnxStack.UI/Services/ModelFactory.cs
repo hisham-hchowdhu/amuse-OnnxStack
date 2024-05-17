@@ -39,6 +39,7 @@ namespace OnnxStack.UI.Services
             yield return new StableDiffusionModelTemplate("SD-ControlNet", DiffuserPipelineType.StableDiffusion, ModelType.Base, 512, DiffuserType.ControlNet, DiffuserType.ControlNetImage);
 
             yield return new StableDiffusionModelTemplate("SDXL", DiffuserPipelineType.StableDiffusionXL, ModelType.Base, 1024, DiffuserType.TextToImage, DiffuserType.ImageToImage, DiffuserType.ImageInpaintLegacy);
+            yield return new StableDiffusionModelTemplate("SDXL-Turbo", DiffuserPipelineType.StableDiffusionXL, ModelType.Turbo, 512, DiffuserType.TextToImage, DiffuserType.ImageToImage, DiffuserType.ImageInpaintLegacy);
             yield return new StableDiffusionModelTemplate("SDXL-Inpaint", DiffuserPipelineType.StableDiffusionXL, ModelType.Base, 1024, DiffuserType.ImageInpaint);
             yield return new StableDiffusionModelTemplate("SDXL-Refiner", DiffuserPipelineType.StableDiffusionXL, ModelType.Refiner, 1024, DiffuserType.ImageToImage, DiffuserType.ImageInpaintLegacy);
 
@@ -96,7 +97,18 @@ namespace OnnxStack.UI.Services
                     modelSet.VaeDecoderConfig = new AutoEncoderModelConfig { OnnxModelPath = vaeDecoder, ScaleFactor = 0.13025f };
                     modelSet.VaeEncoderConfig = new AutoEncoderModelConfig { OnnxModelPath = vaeEncoder, ScaleFactor = 0.13025f };
                 }
-                else
+                else if (modelTemplate.ModelType == ModelType.Turbo)
+                {
+                    modelSet.SampleSize = 512;
+                    modelSet.UnetConfig = new UNetConditionModelConfig { OnnxModelPath = unetPath, ModelType = ModelType.Turbo };
+                    modelSet.TokenizerConfig = new TokenizerModelConfig { OnnxModelPath = tokenizerPath, PadTokenId = 1 };
+                    modelSet.Tokenizer2Config = new TokenizerModelConfig { OnnxModelPath = tokenizer2Path, TokenizerLength = 1280, PadTokenId = 1 };
+                    modelSet.TextEncoderConfig = new TextEncoderModelConfig { OnnxModelPath = textEncoderPath };
+                    modelSet.TextEncoder2Config = new TextEncoderModelConfig { OnnxModelPath = textEncoder2Path };
+                    modelSet.VaeDecoderConfig = new AutoEncoderModelConfig { OnnxModelPath = vaeDecoder, ScaleFactor = 0.13025f };
+                    modelSet.VaeEncoderConfig = new AutoEncoderModelConfig { OnnxModelPath = vaeEncoder, ScaleFactor = 0.13025f };
+                }
+                else 
                 {
                     modelSet.SampleSize = 1024;
                     modelSet.UnetConfig = new UNetConditionModelConfig { OnnxModelPath = unetPath, ModelType = ModelType.Base };

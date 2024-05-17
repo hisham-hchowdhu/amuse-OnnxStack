@@ -361,6 +361,11 @@ namespace OnnxStack.UI.Views
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            int deviceId = UISettings.DefaultDeviceId;
+        }
     }
 
 

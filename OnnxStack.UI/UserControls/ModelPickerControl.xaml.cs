@@ -110,6 +110,9 @@ namespace OnnxStack.UI.UserControls
             if (_stableDiffusionService.IsModelLoaded(SelectedModel.ModelSet))
                 return;
 
+            // update the device id based on the user settings
+            SelectedModel.ModelSet.DeviceId = UISettings.DefaultDeviceId;
+            _logger.LogInformation($" using Device '{SelectedModel.ModelSet.DeviceId}', execution provider: '{SelectedModel.ModelSet.ExecutionProvider}'");
             var elapsed = _logger.LogBegin($"'{SelectedModel.Name}' Loading...");
             SelectedModel.IsLoaded = false;
             SelectedModel.IsLoading = true;

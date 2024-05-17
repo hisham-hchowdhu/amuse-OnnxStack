@@ -14,6 +14,7 @@ using OnnxStack.StableDiffusion.Helpers;
 using OnnxStack.StableDiffusion.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -581,6 +582,9 @@ namespace OnnxStack.StableDiffusion.Pipelines
 
             var metadata = await _tokenizer.GetMetadataAsync();
             var inputTensor = new DenseTensor<string>(new string[] { inputText }, new int[] { 1 });
+
+            var timestamp = _logger.LogBegin();
+
             using (var inferenceParameters = new OnnxInferenceParameters(metadata))
             {
                 inferenceParameters.AddInputTensor(inputTensor);
@@ -588,6 +592,7 @@ namespace OnnxStack.StableDiffusion.Pipelines
                 inferenceParameters.AddOutputBuffer();
                 using (var results = _tokenizer.RunInference(inferenceParameters))
                 {
+                    _logger?.LogEnd("Tokenizer ", timestamp);
                     return new TokenizerResult(results[0].ToArray<long>(), results[1].ToArray<long>());
                 }
             }
@@ -603,6 +608,10 @@ namespace OnnxStack.StableDiffusion.Pipelines
         {
             var metadata = await _textEncoder.GetMetadataAsync();
             var inputTensor = new DenseTensor<int>(tokenizedInput.InputIds.ToInt(), new[] { 1, tokenizedInput.InputIds.Length });
+
+
+            var timestamp = _logger.LogBegin();
+
             using (var inferenceParameters = new OnnxInferenceParameters(metadata))
             {
                 inferenceParameters.AddInputTensor(inputTensor);
@@ -610,6 +619,9 @@ namespace OnnxStack.StableDiffusion.Pipelines
                 inferenceParameters.AddOutputBuffer(new int[] { 1, _tokenizer.TokenizerLength });
 
                 var results = await _textEncoder.RunInferenceAsync(inferenceParameters);
+
+                _logger?.LogEnd("_textEncoder ", timestamp);
+
                 using (var promptEmbeds = results.First())
                 using (var promptEmbedsPooled = results.Last())
                 {

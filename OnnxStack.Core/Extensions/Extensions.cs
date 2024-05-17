@@ -61,7 +61,7 @@ namespace OnnxStack.Core
 
         public static T ApplyDefaults<T>(this T config, IOnnxModelSetConfig defaults) where T : OnnxModelConfig
         {
-            config.DeviceId ??= defaults.DeviceId;
+            config.DeviceId = defaults.DeviceId;
             config.ExecutionMode ??= defaults.ExecutionMode;
             config.ExecutionProvider ??= defaults.ExecutionProvider;
             config.InterOpNumThreads ??= defaults.InterOpNumThreads;
