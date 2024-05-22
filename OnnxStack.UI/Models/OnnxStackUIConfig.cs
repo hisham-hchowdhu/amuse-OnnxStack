@@ -27,6 +27,11 @@ namespace OnnxStack.UI.Models
 
         public ExecutionProvider GetSupportedExecutionProvider()
         {
+            //if (_selectedDevice.Name == "NPU")
+            {
+
+            }
+
 #if DEBUG_NVIDIA || RELEASE_NVIDIA
             return ExecutionProvider.Cuda;
 #else

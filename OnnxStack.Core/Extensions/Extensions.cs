@@ -39,6 +39,9 @@ namespace OnnxStack.Core
                 case ExecutionProvider.CoreML:
                     sessionOptions.AppendExecutionProvider_CoreML(CoreMLFlags.COREML_FLAG_ONLY_ENABLE_DEVICE_WITH_ANE);
                     return sessionOptions;
+                case ExecutionProvider.RyzenAI:
+                    //sessionOptions.AppendExecutionProvider_RyzenAI();
+                    return sessionOptions;
                 case ExecutionProvider.OpenVino:
                     var deviceId = configuration.DeviceId switch
                     {

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Name="UI">
     <DockPanel DataContext="{Binding ElementName=UI}">
-        <ComboBox ItemsSource="{Binding Devices}" SelectedItem="{Binding SelectedDevice}">
+        <ComboBox ItemsSource="{Binding Devices}" SelectedItem="{Binding SelectedDevice}" SelectionChanged="ComboBox_SelectionChanged">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -15,6 +15,9 @@
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Visibility" Value="Visible" />
                                     <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Name}" Value="NPU">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
                                         <DataTrigger Binding="{Binding Name}" Value="CPU">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                         </DataTrigger>
