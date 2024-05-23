@@ -180,16 +180,20 @@ namespace OnnxStack.UI.Views
 
             try
             {
-                var timestamp = Stopwatch.GetTimestamp();
-                var result = await _stableDiffusionService.GenerateImageAsync(new ModelOptions(_selectedModel.ModelSet), promptOptions, schedulerOptions, ProgressCallback(), _cancelationTokenSource.Token);
-                var resultImage = await GenerateResultAsync(result, promptOptions, schedulerOptions, timestamp);
-                if (resultImage != null)
-                {
-                    ResultImage = resultImage;
-                    HasResult = true;
-                    ImageResults.Add(resultImage);
-                }
+                var runCount = schedulerOptions.RunCount;
 
+                for (var i = 0; i < runCount; i++)
+                {
+                    var timestamp = Stopwatch.GetTimestamp();
+                    var result = await _stableDiffusionService.GenerateImageAsync(new ModelOptions(_selectedModel.ModelSet), promptOptions, schedulerOptions, ProgressCallback(), _cancelationTokenSource.Token);
+                    var resultImage = await GenerateResultAsync(result, promptOptions, schedulerOptions, timestamp);
+                    if (resultImage != null)
+                    {
+                        ResultImage = resultImage;
+                        HasResult = true;
+                        ImageResults.Add(resultImage);
+                    }
+                }
             }
             catch (OperationCanceledException)
             {

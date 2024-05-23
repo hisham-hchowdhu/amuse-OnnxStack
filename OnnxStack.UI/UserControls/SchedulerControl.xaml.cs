@@ -157,6 +157,7 @@ namespace OnnxStack.UI.UserControls
                 }
 
                 SchedulerOptions.SchedulerType = SchedulerType.EulerAncestral;
+                SchedulerOptions.RunCount      = 1;
             }
         }
 

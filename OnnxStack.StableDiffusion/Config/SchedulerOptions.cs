@@ -48,6 +48,15 @@ namespace OnnxStack.StableDiffusion.Config
         public int InferenceSteps { get; set; } = 30;
 
         /// <summary>
+        /// Gets or sets the number of images is generated in a loop
+        /// </summary>
+        /// <value>
+        /// the number of images is generated in a loop
+        /// </value>
+        [Range(1, 1000)]
+        public int RunCount { get; set; } = 1;
+
+        /// <summary>
         /// Gets or sets the guidance scale.
         /// </summary>
         /// <value>

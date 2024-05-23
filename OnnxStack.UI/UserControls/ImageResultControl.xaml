@@ -46,6 +46,10 @@
                         <Button Content="{Binding Result.SchedulerOptions.Seed}" Command="{Binding UpdateSeedCommand}" CommandParameter="{Binding Result.SchedulerOptions.Seed}" Margin="5,0,0,0" Style="{x:Null}" BorderThickness="0" Background="Transparent" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="RunCount:" Margin="5,0,0,0"  FontSize="10" Opacity=".6" VerticalAlignment="Center" FontStyle="Italic"/>
+                        <Button Content="{Binding Result.SchedulerOptions.RunCount}" Command="{Binding UpdateSeedCommand}" CommandParameter="{Binding Result.SchedulerOptions.RunCount}" Margin="5,0,0,0" Style="{x:Null}" BorderThickness="0" Background="Transparent" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="Elapsed:" Margin="5,0,0,0"  FontSize="10" Opacity=".6" VerticalAlignment="Center" FontStyle="Italic"/>
                         <TextBlock Text="{Binding Result.Elapsed, StringFormat={}{0:F1}s}" Margin="5,0,0,0"/>
                     </StackPanel>
