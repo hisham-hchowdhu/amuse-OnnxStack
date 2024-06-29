@@ -52,7 +52,7 @@ namespace OnnxStack.StableDiffusion.Pipelines
                 {
                     Width = 512,
                     Height = 512,
-                    InferenceSteps = 4,
+                    InferenceSteps = 2,
                     GuidanceScale = 0f,
                     SchedulerType = SchedulerType.EulerAncestral
                 };

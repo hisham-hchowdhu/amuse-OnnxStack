@@ -54,7 +54,7 @@ namespace OnnxStack.StableDiffusion.Config
         /// the number of images is generated in a loop
         /// </value>
         [Range(1, 1000)]
-        public int RunCount { get; set; } = 1;
+        public int BatchCount { get; set; } = 1;
 
         /// <summary>
         /// Gets or sets the guidance scale.

@@ -142,7 +142,7 @@ namespace OnnxStack.UI.UserControls
                 if (model.ModelSet.UnetConfig.ModelType == ModelType.Turbo)
                 {
                     SchedulerOptions.OriginalInferenceSteps = 100;
-                    SchedulerOptions.InferenceSteps = 4;
+                    SchedulerOptions.InferenceSteps = 2;
                     SchedulerOptions.GuidanceScale = 0f;
                     SchedulerOptions.Width = 512;
                     SchedulerOptions.Height = 512;
@@ -157,7 +157,7 @@ namespace OnnxStack.UI.UserControls
                 }
 
                 SchedulerOptions.SchedulerType = SchedulerType.EulerAncestral;
-                SchedulerOptions.RunCount      = 1;
+                SchedulerOptions.BatchCount      = 1;
             }
         }
 

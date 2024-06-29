@@ -229,18 +229,18 @@ namespace OnnxStack.StableDiffusion.Helpers
             if (pipelineType == DiffuserPipelineType.StableDiffusion && modelType == ModelType.Turbo)
                 return new SchedulerOptions
                 {
-                    InferenceSteps = 4,
+                    InferenceSteps = 2,
                     GuidanceScale = 0,
                     SchedulerType = SchedulerType.EulerAncestral
                 };
 
-            // SDXL-Turbo Models , 4 Steps, No Guidance, SampleSize: 512
+            // SDXL-Turbo Models , 2 Steps by default, No Guidance, SampleSize: 512
             if (pipelineType == DiffuserPipelineType.StableDiffusionXL && modelType == ModelType.Turbo)
                 return new SchedulerOptions
                 {
                     Width = 512,
                     Height = 512,
-                    InferenceSteps = 4,
+                    InferenceSteps = 2,
                     GuidanceScale = 0,
                     SchedulerType = SchedulerType.EulerAncestral
                 };

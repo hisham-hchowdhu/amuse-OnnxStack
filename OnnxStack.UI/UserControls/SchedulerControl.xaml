@@ -68,8 +68,8 @@
 
                     <UniformGrid Columns="2" Margin="0,5,0,0">
                         <StackPanel>
-                            <Label>RunCount</Label>
-                            <TextBox Text="{Binding SchedulerOptions.RunCount}"/>
+                            <Label>BatchCount</Label>
+                            <TextBox Text="{Binding SchedulerOptions.BatchCount}"/>
                         </StackPanel>
                     </UniformGrid>
                     

@@ -180,9 +180,10 @@ namespace OnnxStack.UI.Views
 
             try
             {
-                var runCount = schedulerOptions.RunCount;
-
-                for (var i = 0; i < runCount; i++)
+                var BatchCount = schedulerOptions.BatchCount;
+                var userSeed   = schedulerOptions.Seed;
+                schedulerOptions.BatchCount = BatchCount;
+                for (var i = 0; i < BatchCount; i++)
                 {
                     var timestamp = Stopwatch.GetTimestamp();
                     var result = await _stableDiffusionService.GenerateImageAsync(new ModelOptions(_selectedModel.ModelSet), promptOptions, schedulerOptions, ProgressCallback(), _cancelationTokenSource.Token);
@@ -193,6 +194,9 @@ namespace OnnxStack.UI.Views
                         HasResult = true;
                         ImageResults.Add(resultImage);
                     }
+
+                    // reset the seed
+                    //schedulerOptions.Seed = userSeed;
                 }
             }
             catch (OperationCanceledException)

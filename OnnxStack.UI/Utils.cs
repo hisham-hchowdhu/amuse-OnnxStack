@@ -108,7 +108,7 @@ namespace OnnxStack.UI
                 PredictionType = model.PredictionType,
                 SampleMaxValue = model.SampleMaxValue,
                 Seed = model.Seed,
-                RunCount = model.RunCount,
+                BatchCount = model.BatchCount,
                 StepsOffset = model.StepsOffset,
                 Width = model.Width,
                 Strength = model.Strength,

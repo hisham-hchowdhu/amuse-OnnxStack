@@ -11,7 +11,7 @@ namespace OnnxStack.UI.Models
         private int _height = 512;
         private int _width = 512;
         private int _seed;
-        private int _runCount = 1;
+        private int _BatchCount = 1;
         private int _inferenceSteps = 30;
         private float _guidanceScale = 7.5f;
         private float _strength = 0.75f;
@@ -76,11 +76,11 @@ namespace OnnxStack.UI.Models
         }
 
         [Range(1, 10000)]
-        public int RunCount
+        public int BatchCount
         {
             get
-            { return _runCount; }
-            set { _runCount = value; NotifyPropertyChanged(); }
+            { return _BatchCount; }
+            set { _BatchCount = value; NotifyPropertyChanged(); }
         }
 
         /// <summary>
