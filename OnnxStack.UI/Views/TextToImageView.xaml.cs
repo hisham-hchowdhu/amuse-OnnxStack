@@ -196,7 +196,7 @@ namespace OnnxStack.UI.Views
                     }
 
                     // reset the seed
-                    //schedulerOptions.Seed = userSeed;
+                    schedulerOptions.Seed = userSeed;
                 }
             }
             catch (OperationCanceledException)
