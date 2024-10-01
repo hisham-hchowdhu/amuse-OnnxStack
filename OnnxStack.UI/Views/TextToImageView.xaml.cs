@@ -303,6 +303,7 @@ namespace OnnxStack.UI.Views
 
         private Task<ImageResult> GenerateResultAsync(OnnxImage onnxImage, PromptOptions promptOptions, SchedulerOptions schedulerOptions, long timestamp)
         {
+            var imageGenTime = Stopwatch.GetElapsedTime(timestamp).TotalSeconds;
             var image = Utils.CreateBitmap(onnxImage.GetImageBytes());
 
             var imageResult = new ImageResult
@@ -315,7 +316,8 @@ namespace OnnxStack.UI.Views
                 DiffuserType = promptOptions.DiffuserType,
                 SchedulerType = schedulerOptions.SchedulerType,
                 SchedulerOptions = schedulerOptions,
-                Elapsed = Stopwatch.GetElapsedTime(timestamp).TotalSeconds
+                Elapsed = Stopwatch.GetElapsedTime(timestamp).TotalSeconds,
+                dElapsed = imageGenTime
             };
             return Task.FromResult(imageResult);
         }
