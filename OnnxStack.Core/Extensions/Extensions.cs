@@ -4,6 +4,7 @@ using OnnxStack.Core.Config;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 
@@ -40,16 +41,26 @@ namespace OnnxStack.Core
                     sessionOptions.AppendExecutionProvider_CoreML(CoreMLFlags.COREML_FLAG_ONLY_ENABLE_DEVICE_WITH_ANE);
                     return sessionOptions;
                 case ExecutionProvider.RyzenAI:
-                     /*FOR USING NPU: UNCOMMENT THIS BLOCK AND BUILD IT
-                     string dd_cache_path = System.Environment.GetEnvironmentVariable("RYZEN_DD_CACHE") + "/.cache";
-                     sessionOptions.AddSessionConfigEntry("dd_cache", dd_cache_path);
- 
-                     string dd_dll_path = System.Environment.GetEnvironmentVariable("RYZEN_CUSTOM_DD_DLL");
-                     sessionOptions.RegisterCustomOpLibrary(dd_dll_path);
- 
-                     sessionOptions.AppendExecutionProvider_RyzenAI();*/
-                     
-                     return sessionOptions;
+                    /*FOR USING NPU: UNCOMMENT THIS BLOCK AND BUILD IT
+                    var modelCache = Path.Combine(Path.GetDirectoryName(configuration.OnnxModelPath), ".cache");
+                    var dynamicDispatch = Path.Combine(Environment.CurrentDirectory, "DynamicDispatch");
+
+                    DirectoryInfo parentDir = new DirectoryInfo(Path.GetDirectoryName(configuration.OnnxModelPath));
+                    parentDir = parentDir.Parent;
+
+                    sessionOptions.AddSessionConfigEntry("dd_cache", modelCache);
+                    sessionOptions.AddSessionConfigEntry("MODEL_DIR", parentDir.FullName);
+                    sessionOptions.AddSessionConfigEntry("dod_root", dynamicDispatch);
+
+                    if (Path.GetDirectoryName(configuration.OnnxModelPath).Contains("unet"))
+                        sessionOptions.AddSessionConfigEntry("model_name", "UNET");
+                    else if (Path.GetDirectoryName(configuration.OnnxModelPath).Contains("vae_decoder"))
+                        sessionOptions.AddSessionConfigEntry("model_name", "DECODER");
+
+                    sessionOptions.RegisterCustomOpLibrary("onnx_custom_ops.dll");
+                    sessionOptions.AppendExecutionProvider_RyzenAI */
+
+                    return sessionOptions;
                 case ExecutionProvider.OpenVino:
                     var deviceId = configuration.DeviceId switch
                     {
