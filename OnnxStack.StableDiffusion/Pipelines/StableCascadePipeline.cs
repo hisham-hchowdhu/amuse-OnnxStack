@@ -34,8 +34,8 @@ namespace OnnxStack.StableDiffusion.Pipelines
         /// <param name="diffusers">The diffusers.</param>
         /// <param name="defaultSchedulerOptions">The default scheduler options.</param>
         /// <param name="logger">The logger.</param>
-        public StableCascadePipeline(PipelineOptions pipelineOptions, TokenizerModel tokenizer, TextEncoderModel textEncoder, UNetConditionModel priorUnet, UNetConditionModel decoderUnet, AutoEncoderModel imageDecoder, AutoEncoderModel imageEncoder, UNetConditionModel controlNet, List<DiffuserType> diffusers, SchedulerOptions defaultSchedulerOptions = default, ILogger logger = default)
-            : base(pipelineOptions, tokenizer, textEncoder, priorUnet, imageDecoder, imageEncoder, controlNet, diffusers, defaultSchedulerOptions, logger)
+        public StableCascadePipeline(PipelineOptions pipelineOptions, TokenizerModel tokenizer, TextEncoderModel textEncoder, UNetConditionModel priorUnet, UNetConditionModel decoderUnet, AutoEncoderModel imageDecoder, AutoEncoderModel imageEncoder, UNetConditionModel controlNet, List<DiffuserType> diffusers, List<SchedulerType> schedulers, SchedulerOptions defaultSchedulerOptions = default, ILogger logger = default)
+            : base(pipelineOptions, tokenizer, textEncoder, priorUnet, imageDecoder, imageEncoder, controlNet, diffusers, schedulers,defaultSchedulerOptions, logger)
         {
             _decoderUnet = decoderUnet;
             _supportedDiffusers = diffusers ?? new List<DiffuserType>
@@ -43,7 +43,7 @@ namespace OnnxStack.StableDiffusion.Pipelines
                 DiffuserType.TextToImage,
                 DiffuserType.ImageToImage
             };
-            _supportedSchedulers = new List<SchedulerType>
+            _supportedSchedulers = schedulers ?? new List<SchedulerType>
             {
                 SchedulerType.DDPM,
                 SchedulerType.DDPMWuerstchen
@@ -233,9 +233,9 @@ namespace OnnxStack.StableDiffusion.Pipelines
             // The CLIP tokenizer only supports 77 tokens, batch process in groups of 77 and concatenate
             var tokenBatches = new List<long[]>();
             var attentionBatches = new List<long[]>();
-            foreach (var tokenBatch in inputTokens.InputIds.Batch(_tokenizer.TokenizerLimit))
+            foreach (var tokenBatch in inputTokens.InputIds.Chunk(_tokenizer.TokenizerLimit))
                 tokenBatches.Add(PadWithBlankTokens(tokenBatch, _tokenizer.TokenizerLimit, _tokenizer.PadTokenId).ToArray());
-            foreach (var attentionBatch in inputTokens.AttentionMask.Batch(_tokenizer.TokenizerLimit))
+            foreach (var attentionBatch in inputTokens.AttentionMask.Chunk(_tokenizer.TokenizerLimit))
                 attentionBatches.Add(PadWithBlankTokens(attentionBatch, _tokenizer.TokenizerLimit, 1).ToArray());
 
             var promptEmbeddings = new List<float>();
@@ -261,18 +261,19 @@ namespace OnnxStack.StableDiffusion.Pipelines
         /// <returns></returns>
         public static new StableCascadePipeline CreatePipeline(StableDiffusionModelSet modelSet, ILogger logger = default)
         {
-            var priorUnet = new UNetConditionModel(modelSet.UnetConfig.ApplyDefaults(modelSet));
-            var decoderUnet = new UNetConditionModel(modelSet.Unet2Config.ApplyDefaults(modelSet));
-            var tokenizer = new TokenizerModel(modelSet.TokenizerConfig.ApplyDefaults(modelSet));
-            var textEncoder = new TextEncoderModel(modelSet.TextEncoderConfig.ApplyDefaults(modelSet));
-            var imageDecoder = new AutoEncoderModel(modelSet.VaeDecoderConfig.ApplyDefaults(modelSet));
-            var imageEncoder = new AutoEncoderModel(modelSet.VaeEncoderConfig.ApplyDefaults(modelSet));
+            var config = modelSet with { };
+            var priorUnet = new UNetConditionModel(config.UnetConfig.ApplyDefaults(config));
+            var decoderUnet = new UNetConditionModel(config.Unet2Config.ApplyDefaults(config));
+            var tokenizer = new TokenizerModel(config.TokenizerConfig.ApplyDefaults(config));
+            var textEncoder = new TextEncoderModel(config.TextEncoderConfig.ApplyDefaults(config));
+            var imageDecoder = new AutoEncoderModel(config.VaeDecoderConfig.ApplyDefaults(config));
+            var imageEncoder = new AutoEncoderModel(config.VaeEncoderConfig.ApplyDefaults(config));
             var controlnet = default(UNetConditionModel);
-            if (modelSet.ControlNetUnetConfig is not null)
-                controlnet = new UNetConditionModel(modelSet.ControlNetUnetConfig.ApplyDefaults(modelSet));
+            if (config.ControlNetUnetConfig is not null)
+                controlnet = new UNetConditionModel(config.ControlNetUnetConfig.ApplyDefaults(config));
 
-            var pipelineOptions = new PipelineOptions(modelSet.Name, modelSet.MemoryMode);
-            return new StableCascadePipeline(pipelineOptions, tokenizer, textEncoder, priorUnet, decoderUnet, imageDecoder, imageEncoder, controlnet, modelSet.Diffusers, modelSet.SchedulerOptions, logger);
+            var pipelineOptions = new PipelineOptions(config.Name, config.MemoryMode);
+            return new StableCascadePipeline(pipelineOptions, tokenizer, textEncoder, priorUnet, decoderUnet, imageDecoder, imageEncoder, controlnet, config.Diffusers, config.Schedulers, config.SchedulerOptions, logger);
         }
 
 
