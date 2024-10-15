@@ -55,6 +55,9 @@ namespace OnnxStack.UI.Services
                 _logger.LogError($"[GetDevices] - Failed to query devices, {ex.Message}");
             }
 
+            // add NPU option
+            devices.Add(new DeviceInfo("NPU", 0, 0));
+
             _logger.LogInformation($"[GetDevices] - Query devices complete, Devices Found: {devices.Count}");
             return devices;
         }

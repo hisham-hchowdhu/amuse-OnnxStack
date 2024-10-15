@@ -99,9 +99,18 @@ namespace OnnxStack.UI.UserControls
         /// </summary>
         private void OnSettingsChanged()
         {
-            SelectedDevice = ExecutionProvider == Core.Config.ExecutionProvider.Cpu
-               ? Devices.FirstOrDefault()
-               : Devices.FirstOrDefault(x => x.Name != "CPU" && x.DeviceId == DeviceId);
+            if (ExecutionProvider == Core.Config.ExecutionProvider.Cpu)
+            {
+                SelectedDevice = Devices.FirstOrDefault();
+            }
+            else if (ExecutionProvider == Core.Config.ExecutionProvider.RyzenAI)
+            {
+                SelectedDevice = Devices.FirstOrDefault(x => x.Name == "NPU" && x.DeviceId == DeviceId);
+            }
+            else
+            {
+                SelectedDevice = Devices.FirstOrDefault(x => x.Name != "CPU" && x.DeviceId == DeviceId);
+            }
         }
 
 
@@ -117,6 +126,11 @@ namespace OnnxStack.UI.UserControls
             {
                 DeviceId = 0;
                 ExecutionProvider = Core.Config.ExecutionProvider.Cpu;
+            }
+            else if (_selectedDevice.Name == "NPU")
+            {
+                DeviceId = 0;
+                ExecutionProvider = Core.Config.ExecutionProvider.RyzenAI;
             }
             else
             {
@@ -135,5 +149,10 @@ namespace OnnxStack.UI.UserControls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
         #endregion
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -40,6 +40,17 @@ namespace OnnxStack.Core
                 case ExecutionProvider.CoreML:
                     sessionOptions.AppendExecutionProvider_CoreML(CoreMLFlags.COREML_FLAG_ONLY_ENABLE_DEVICE_WITH_ANE);
                     return sessionOptions;
+                case ExecutionProvider.RyzenAI:
+                     /*FOR USING NPU: UNCOMMENT THIS BLOCK AND BUILD IT
+                     string dd_cache_path = System.Environment.GetEnvironmentVariable("RYZEN_DD_CACHE") + "/.cache";
+                     sessionOptions.AddSessionConfigEntry("dd_cache", dd_cache_path);
+ 
+                     string dd_dll_path = System.Environment.GetEnvironmentVariable("RYZEN_CUSTOM_DD_DLL");
+                     sessionOptions.RegisterCustomOpLibrary(dd_dll_path);
+ 
+                     sessionOptions.AppendExecutionProvider_RyzenAI();*/
+                     
+                     return sessionOptions;
                 case ExecutionProvider.OpenVino:
                     var deviceId = configuration.DeviceId switch
                     {
@@ -64,7 +75,7 @@ namespace OnnxStack.Core
         {
             return config with
             {
-                DeviceId = config.DeviceId ?? defaults.DeviceId,
+                DeviceId = defaults.DeviceId,
                 ExecutionMode = config.ExecutionMode ?? defaults.ExecutionMode,
                 ExecutionProvider = config.ExecutionProvider ?? defaults.ExecutionProvider,
                 InterOpNumThreads = config.InterOpNumThreads ?? defaults.InterOpNumThreads,

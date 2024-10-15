@@ -22,5 +22,6 @@ namespace OnnxStack.UI.Models
         public SchedulerType SchedulerType { get; init; }
         public SchedulerOptions SchedulerOptions { get; init; }
         public double Elapsed { get; init; }
+        public double dElapsed { get; init; }
     }
 }

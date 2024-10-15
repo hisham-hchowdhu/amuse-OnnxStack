@@ -46,8 +46,16 @@
                         <Button Content="{Binding Result.SchedulerOptions.Seed}" Command="{Binding UpdateSeedCommand}" CommandParameter="{Binding Result.SchedulerOptions.Seed}" Margin="5,0,0,0" Style="{x:Null}" BorderThickness="0" Background="Transparent" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="Elapsed:" Margin="5,0,0,0"  FontSize="10" Opacity=".6" VerticalAlignment="Center" FontStyle="Italic"/>
+                        <TextBlock Text="BatchCount:" Margin="5,0,0,0"  FontSize="10" Opacity=".6" VerticalAlignment="Center" FontStyle="Italic"/>
+                        <Button Content="{Binding Result.SchedulerOptions.BatchCount}" Command="{Binding UpdateSeedCommand}" CommandParameter="{Binding Result.SchedulerOptions.BatchCount}" Margin="5,0,0,0" Style="{x:Null}" BorderThickness="0" Background="Transparent" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Elapsed Time:" Margin="5,0,0,0"  FontSize="10" Opacity=".6" VerticalAlignment="Center" FontStyle="Italic"/>
                         <TextBlock Text="{Binding Result.Elapsed, StringFormat={}{0:F1}s}" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Image Gen Time:" Margin="5,0,0,0"  FontSize="10" Opacity=".6" VerticalAlignment="Center" FontStyle="Italic"/>
+                        <TextBlock Text="{Binding Result.dElapsed, StringFormat={}{0:F1}s}" Margin="5,0,0,0"/>
                     </StackPanel>
                 </UniformGrid>
             </StackPanel>

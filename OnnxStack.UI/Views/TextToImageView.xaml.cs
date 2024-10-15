@@ -180,16 +180,24 @@ namespace OnnxStack.UI.Views
 
             try
             {
-                var timestamp = Stopwatch.GetTimestamp();
-                var result = await _stableDiffusionService.GenerateImageAsync(new ModelOptions(_selectedModel.ModelSet), promptOptions, schedulerOptions, ProgressCallback(), _cancelationTokenSource.Token);
-                var resultImage = await GenerateResultAsync(result, promptOptions, schedulerOptions, timestamp);
-                if (resultImage != null)
+                var BatchCount = schedulerOptions.BatchCount;
+                var userSeed   = schedulerOptions.Seed;
+                schedulerOptions.BatchCount = BatchCount;
+                for (var i = 0; i < BatchCount; i++)
                 {
-                    ResultImage = resultImage;
-                    HasResult = true;
-                    ImageResults.Add(resultImage);
-                }
+                    var timestamp = Stopwatch.GetTimestamp();
+                    var result = await _stableDiffusionService.GenerateImageAsync(new ModelOptions(_selectedModel.ModelSet), promptOptions, schedulerOptions, ProgressCallback(), _cancelationTokenSource.Token);
+                    var resultImage = await GenerateResultAsync(result, promptOptions, schedulerOptions, timestamp);
+                    if (resultImage != null)
+                    {
+                        ResultImage = resultImage;
+                        HasResult = true;
+                        ImageResults.Add(resultImage);
+                    }
 
+                    // reset the seed
+                    schedulerOptions.Seed = userSeed;
+                }
             }
             catch (OperationCanceledException)
             {
@@ -295,6 +303,7 @@ namespace OnnxStack.UI.Views
 
         private Task<ImageResult> GenerateResultAsync(OnnxImage onnxImage, PromptOptions promptOptions, SchedulerOptions schedulerOptions, long timestamp)
         {
+            var imageGenTime = Stopwatch.GetElapsedTime(timestamp).TotalSeconds;
             var image = Utils.CreateBitmap(onnxImage.GetImageBytes());
 
             var imageResult = new ImageResult
@@ -307,7 +316,8 @@ namespace OnnxStack.UI.Views
                 DiffuserType = promptOptions.DiffuserType,
                 SchedulerType = schedulerOptions.SchedulerType,
                 SchedulerOptions = schedulerOptions,
-                Elapsed = Stopwatch.GetElapsedTime(timestamp).TotalSeconds
+                Elapsed = Stopwatch.GetElapsedTime(timestamp).TotalSeconds,
+                dElapsed = imageGenTime
             };
             return Task.FromResult(imageResult);
         }

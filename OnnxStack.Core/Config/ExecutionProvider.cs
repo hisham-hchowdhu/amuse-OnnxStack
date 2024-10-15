@@ -7,6 +7,7 @@
         Cpu = 2,
         CoreML = 3,
         OpenVino = 4,
-        TensorRT = 5
+        TensorRT = 5,
+        RyzenAI = 6,
     }
 }

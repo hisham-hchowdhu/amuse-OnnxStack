@@ -141,7 +141,7 @@ namespace OnnxStack.StableDiffusion.Diffusers
                     if (_memoryMode == MemoryModeType.Minimum)
                         await _vaeDecoder.UnloadAsync();
 
-                    _logger?.LogEnd("Latents decoded", timestamp);
+                    _logger?.LogEnd("Latents decoded (vae decoder)", timestamp);
                     return imageResult.ToDenseTensor();
                 }
             }
