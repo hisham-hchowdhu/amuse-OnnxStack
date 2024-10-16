@@ -33,6 +33,7 @@ namespace OnnxStack.UI.Models
         private ModelFileViewModel _unetModel;
         private ModelFileViewModel _vaeEncoderModel;
         private ModelFileViewModel _vaeDecoderModel;
+        private ModelFileViewModel _textEncoder3Model;
         private ModelFileViewModel _textEncoder2Model;
         private ModelFileViewModel _textEncoderModel;
         private ModelFileViewModel _tokenizer2Model;
@@ -215,6 +216,12 @@ namespace OnnxStack.UI.Models
             set { _textEncoder2Model = value; NotifyPropertyChanged(); }
         }
 
+        public ModelFileViewModel TextEncoder3Model
+        {
+            get { return _textEncoder3Model; }
+            set { _textEncoder3Model = value; NotifyPropertyChanged(); }
+        }
+
         public ModelFileViewModel VaeDecoderModel
         {
             get { return _vaeDecoderModel; }
@@ -380,6 +387,27 @@ namespace OnnxStack.UI.Models
                             || modelset.TextEncoder2Config.Precision.HasValue
                 },
 
+                TextEncoder3Model = modelset.TextEncoder3Config is null ? default : new ModelFileViewModel
+                {
+                    OnnxModelPath = modelset.TextEncoder3Config.OnnxModelPath,
+                    RequiredMemory = modelset.TextEncoder3Config.RequiredMemory,
+
+                    DeviceId = modelset.TextEncoder3Config.DeviceId ?? modelset.DeviceId,
+                    ExecutionMode = modelset.TextEncoder3Config.ExecutionMode ?? modelset.ExecutionMode,
+                    ExecutionProvider = modelset.TextEncoder3Config.ExecutionProvider ?? modelset.ExecutionProvider,
+                    InterOpNumThreads = modelset.TextEncoder3Config.InterOpNumThreads ?? modelset.InterOpNumThreads,
+                    IntraOpNumThreads = modelset.TextEncoder3Config.IntraOpNumThreads ?? modelset.IntraOpNumThreads,
+                    Precision = modelset.TextEncoder3Config.Precision ?? modelset.Precision,
+
+                    IsOverrideEnabled =
+                               modelset.TextEncoder3Config.DeviceId.HasValue
+                            || modelset.TextEncoder3Config.ExecutionMode.HasValue
+                            || modelset.TextEncoder3Config.ExecutionProvider.HasValue
+                            || modelset.TextEncoder3Config.IntraOpNumThreads.HasValue
+                            || modelset.TextEncoder3Config.InterOpNumThreads.HasValue
+                            || modelset.TextEncoder3Config.Precision.HasValue
+                },
+
                 VaeDecoderModel = new ModelFileViewModel
                 {
                     OnnxModelPath = modelset.VaeDecoderConfig.OnnxModelPath,
@@ -509,6 +537,18 @@ namespace OnnxStack.UI.Models
                     IntraOpNumThreads = modelset.TextEncoder2Model.IsOverrideEnabled && modelset.IntraOpNumThreads != modelset.TextEncoder2Model.IntraOpNumThreads ? modelset.TextEncoder2Model.IntraOpNumThreads : default,
                     InterOpNumThreads = modelset.TextEncoder2Model.IsOverrideEnabled && modelset.InterOpNumThreads != modelset.TextEncoder2Model.InterOpNumThreads ? modelset.TextEncoder2Model.InterOpNumThreads : default,
                     Precision = modelset.TextEncoder2Model.IsOverrideEnabled && modelset.Precision != modelset.TextEncoder2Model.Precision ? modelset.TextEncoder2Model.Precision : default,
+                },
+
+                TextEncoder3Config = modelset.TextEncoder3Model is null ? default : new TextEncoderModelConfig
+                {
+                    OnnxModelPath = modelset.TextEncoder3Model.OnnxModelPath,
+                    RequiredMemory = modelset.TextEncoder3Model.RequiredMemory,
+                    DeviceId = modelset.TextEncoder3Model.IsOverrideEnabled && modelset.DeviceId != modelset.TextEncoder3Model.DeviceId ? modelset.TextEncoder3Model.DeviceId : default,
+                    ExecutionMode = modelset.TextEncoder3Model.IsOverrideEnabled && modelset.ExecutionMode != modelset.TextEncoder3Model.ExecutionMode ? modelset.TextEncoder3Model.ExecutionMode : default,
+                    ExecutionProvider = modelset.TextEncoder3Model.IsOverrideEnabled && modelset.ExecutionProvider != modelset.TextEncoder3Model.ExecutionProvider ? modelset.TextEncoder3Model.ExecutionProvider : default,
+                    IntraOpNumThreads = modelset.TextEncoder3Model.IsOverrideEnabled && modelset.IntraOpNumThreads != modelset.TextEncoder3Model.IntraOpNumThreads ? modelset.TextEncoder3Model.IntraOpNumThreads : default,
+                    InterOpNumThreads = modelset.TextEncoder3Model.IsOverrideEnabled && modelset.InterOpNumThreads != modelset.TextEncoder3Model.InterOpNumThreads ? modelset.TextEncoder3Model.InterOpNumThreads : default,
+                    Precision = modelset.TextEncoder3Model.IsOverrideEnabled && modelset.Precision != modelset.TextEncoder3Model.Precision ? modelset.TextEncoder3Model.Precision : default,
                 },
 
                 VaeDecoderConfig = new AutoEncoderModelConfig
