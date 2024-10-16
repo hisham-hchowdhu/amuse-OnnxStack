@@ -111,6 +111,8 @@ namespace OnnxStack.UI.Dialogs
             ValidationResults.Add(new ValidationResult("TextEncoder Model", File.Exists(_modelSetResult.TextEncoderConfig.OnnxModelPath)));
             if (_modelSetResult.TextEncoder2Config is not null)
                 ValidationResults.Add(new ValidationResult("TextEncoder2 Model", File.Exists(_modelSetResult.TextEncoder2Config.OnnxModelPath)));
+            if (_modelSetResult.TextEncoder3Config is not null)
+                ValidationResults.Add(new ValidationResult("TextEncoder3 Model", File.Exists(_modelSetResult.TextEncoder3Config.OnnxModelPath)));
             ValidationResults.Add(new ValidationResult("VaeDecoder Model", File.Exists(_modelSetResult.VaeDecoderConfig.OnnxModelPath)));
             ValidationResults.Add(new ValidationResult("VaeEncoder Model", File.Exists(_modelSetResult.VaeEncoderConfig.OnnxModelPath)));
         }

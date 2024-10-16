@@ -30,7 +30,8 @@ namespace OnnxStack.Console.Runner
             // var pipeline = LatentConsistencyPipeline.CreatePipeline("D:\\Repositories\\LCM_Dreamshaper_v7-onnx");
             // var pipeline = LatentConsistencyXLPipeline.CreatePipeline("D:\\Repositories\\Latent-Consistency-xl-Olive-Onnx");
             // var pipeline = StableDiffusionPipeline.CreatePipeline("D:\\Repositories\\stable-diffusion-v1-5");
-            var pipeline = StableDiffusionXLPipeline.CreatePipeline("D:\\Repositories\\Hyper-SD-onnx");
+            // var pipeline = StableDiffusionXLPipeline.CreatePipeline("D:\\Repositories\\Hyper-SD-onnx");
+            var pipeline = StableDiffusion3Pipeline.CreatePipeline("D:\\Repositories\\stable-diffusion-3-medium-diffusers");
 
             // Prompt
             var promptOptions = new PromptOptions
@@ -41,14 +42,15 @@ namespace OnnxStack.Console.Runner
             // Scheduler
             var schedulerOptions = pipeline.DefaultSchedulerOptions with
             {
-                InferenceSteps = 1,
-                GuidanceScale = 0,
-                SchedulerType = SchedulerType.DDIM,
-                Timesteps = new List<int> { 800 }
+                Seed = 402437323,
+                SchedulerType = SchedulerType.FlowMatchEulerDiscrete,
+                GuidanceScale = 5f,
+                InferenceSteps = 28
             };
 
             // Run pipeline
             var result = await pipeline.RunAsync(promptOptions, schedulerOptions, progressCallback: OutputHelpers.ProgressCallback);
+
 
             // Create Image from Tensor result
             var image = new OnnxImage(result);

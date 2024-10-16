@@ -43,6 +43,8 @@ namespace OnnxStack.UI.Services
             yield return new StableDiffusionModelTemplate("SDXL-Inpaint", DiffuserPipelineType.StableDiffusionXL, ModelType.Base, 1024, DiffuserType.ImageInpaint);
             yield return new StableDiffusionModelTemplate("SDXL-Refiner", DiffuserPipelineType.StableDiffusionXL, ModelType.Refiner, 1024, DiffuserType.ImageToImage, DiffuserType.ImageInpaintLegacy);
 
+            yield return new StableDiffusionModelTemplate("SD3", DiffuserPipelineType.StableDiffusion3, ModelType.Base, 1024, DiffuserType.TextToImage);
+
             yield return new StableDiffusionModelTemplate("LCM", DiffuserPipelineType.LatentConsistency, ModelType.Base, 512, DiffuserType.TextToImage, DiffuserType.ImageToImage, DiffuserType.ImageInpaintLegacy);
             yield return new StableDiffusionModelTemplate("LCM-SDXL", DiffuserPipelineType.LatentConsistencyXL, ModelType.Base, 1024, DiffuserType.TextToImage, DiffuserType.ImageToImage, DiffuserType.ImageInpaintLegacy);
 
@@ -80,13 +82,18 @@ namespace OnnxStack.UI.Services
             var vaeEncoder = Path.Combine(folder, "vae_encoder", "model.onnx");
             var tokenizer2Path = Path.Combine(folder, "tokenizer_2", "model.onnx");
             var textEncoder2Path = Path.Combine(folder, "text_encoder_2", "model.onnx");
+            var textEncoder3Path = Path.Combine(folder, "text_encoder_3", "model.onnx");
             var controlnet = Path.Combine(folder, "controlnet", "model.onnx");
             if (!File.Exists(tokenizerPath))
                 tokenizerPath = _defaultTokenizerPath;
             if (!File.Exists(tokenizer2Path))
                 tokenizer2Path = _defaultTokenizerPath;
+            if (!File.Exists(textEncoder3Path))
+                textEncoder3Path = null;
 
-            if (modelSet.PipelineType == DiffuserPipelineType.StableDiffusionXL || modelSet.PipelineType == DiffuserPipelineType.LatentConsistencyXL)
+            if (modelSet.PipelineType == DiffuserPipelineType.StableDiffusionXL || 
+                modelSet.PipelineType == DiffuserPipelineType.LatentConsistencyXL ||
+                modelSet.PipelineType == DiffuserPipelineType.StableDiffusion3)
             {
                 if (modelTemplate.ModelType == ModelType.Refiner)
                 {
@@ -116,6 +123,8 @@ namespace OnnxStack.UI.Services
                     modelSet.Tokenizer2Config = new TokenizerModelConfig { OnnxModelPath = tokenizer2Path, TokenizerLength = 1280, PadTokenId = 1 };
                     modelSet.TextEncoderConfig = new TextEncoderModelConfig { OnnxModelPath = textEncoderPath };
                     modelSet.TextEncoder2Config = new TextEncoderModelConfig { OnnxModelPath = textEncoder2Path };
+                    if (textEncoder3Path != null)
+                        modelSet.TextEncoder3Config = new TextEncoderModelConfig { OnnxModelPath = textEncoder3Path };
                     modelSet.VaeDecoderConfig = new AutoEncoderModelConfig { OnnxModelPath = vaeDecoder, ScaleFactor = 0.13025f };
                     modelSet.VaeEncoderConfig = new AutoEncoderModelConfig { OnnxModelPath = vaeEncoder, ScaleFactor = 0.13025f };
                 }

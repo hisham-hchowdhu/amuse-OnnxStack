@@ -88,7 +88,7 @@ namespace OnnxStack.StableDiffusion.Helpers
 
 
             // SDXL Pipelines
-            if (pipeline == DiffuserPipelineType.StableDiffusionXL || pipeline == DiffuserPipelineType.LatentConsistencyXL)
+            if (pipeline == DiffuserPipelineType.StableDiffusionXL || pipeline == DiffuserPipelineType.LatentConsistencyXL || pipeline == DiffuserPipelineType.StableDiffusion3)
             {
                 // SDXL-Turbo has a 512 SampleSize
                 if (modelType != ModelType.Turbo)

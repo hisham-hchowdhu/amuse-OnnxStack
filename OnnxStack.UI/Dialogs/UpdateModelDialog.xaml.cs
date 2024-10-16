@@ -81,6 +81,8 @@ namespace OnnxStack.UI.Dialogs
                 return Task.CompletedTask;
             if (_modelSetResult.TextEncoder2Config is not null && !ValidateFile(_modelSetResult.TextEncoder2Config.OnnxModelPath, "TextEncoder2"))
                 return Task.CompletedTask;
+            if (_modelSetResult.TextEncoder3Config is not null && !ValidateFile(_modelSetResult.TextEncoder3Config.OnnxModelPath, "TextEncoder3"))
+                return Task.CompletedTask;
             if (!ValidateFile(_modelSetResult.VaeDecoderConfig.OnnxModelPath, "VaeDecoder"))
                 return Task.CompletedTask;
             if (!ValidateFile(_modelSetResult.VaeEncoderConfig.OnnxModelPath, "VaeEncoder"))

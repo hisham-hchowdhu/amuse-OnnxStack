@@ -264,6 +264,9 @@ namespace OnnxStack.Core
         /// <exception cref="System.NotImplementedException">Only axis 0 is supported</exception>
         public static DenseTensor<float> Repeat(this DenseTensor<float> tensor1, int count, int axis = 0)
         {
+            if (count == 1)
+                return tensor1;
+
             if (axis != 0)
                 throw new NotImplementedException("Only axis 0 is supported");
 
@@ -308,6 +311,29 @@ namespace OnnxStack.Core
                 var start = i * newLength;
                 yield return new DenseTensor<float>(tensor.Buffer.Slice(start, newLength), dimensions);
             }
+        }
+
+
+        /// <summary>
+        /// Split first tensor from batch and return
+        /// </summary>
+        /// <param name="tensor">The tensor.</param>
+        /// <returns></returns>
+        public static DenseTensor<float> FirstBatch(this DenseTensor<float> tensor)
+        {
+            return SplitBatch(tensor).FirstOrDefault();
+        }
+
+
+        /// <summary>
+        /// Reshapes the specified dimensions.
+        /// </summary>
+        /// <param name="tensor">The tensor.</param>
+        /// <param name="dimensions">The dimensions.</param>
+        /// <returns></returns>
+        public static DenseTensor<float> ReshapeTensor(this DenseTensor<float> tensor, ReadOnlySpan<int> dimensions)
+        {
+            return tensor.Reshape(dimensions) as DenseTensor<float>;
         }
 
 
@@ -379,15 +405,32 @@ namespace OnnxStack.Core
             dimensions[1] += tensor2.Dimensions[1];
             var concatenatedTensor = new DenseTensor<float>(dimensions);
 
-            // Copy data from the first tensor
-            for (int i = 0; i < dimensions[0]; i++)
-                for (int j = 0; j < tensor1.Dimensions[1]; j++)
-                    concatenatedTensor[i, j] = tensor1[i, j];
+            if (tensor1.Dimensions.Length == 2)
+            {
+                for (int i = 0; i < tensor1.Dimensions[0]; i++)
+                    for (int j = 0; j < tensor1.Dimensions[1]; j++)
+                        concatenatedTensor[i, j] = tensor1[i, j];
 
-            // Copy data from the second tensor
-            for (int i = 0; i < dimensions[0]; i++)
-                for (int j = 0; j < tensor2.Dimensions[1]; j++)
-                    concatenatedTensor[i, j + tensor1.Dimensions[1]] = tensor2[i, j];
+                for (int i = 0; i < tensor1.Dimensions[0]; i++)
+                    for (int j = 0; j < tensor2.Dimensions[1]; j++)
+                        concatenatedTensor[i, j + tensor1.Dimensions[1]] = tensor2[i, j];
+            }
+            else if (tensor1.Dimensions.Length == 3)
+            {
+                for (int i = 0; i < tensor1.Dimensions[0]; i++)
+                    for (int j = 0; j < tensor1.Dimensions[1]; j++)
+                        for (int k = 0; k < tensor1.Dimensions[2]; k++)
+                            concatenatedTensor[i, j, k] = tensor1[i, j, k];
+
+                for (int i = 0; i < tensor2.Dimensions[0]; i++)
+                    for (int j = 0; j < tensor2.Dimensions[1]; j++)
+                        for (int k = 0; k < tensor2.Dimensions[2]; k++)
+                            concatenatedTensor[i, j + tensor1.Dimensions[1], k] = tensor2[i, j, k];
+            }
+            else
+            {
+                throw new ArgumentException("Length 2 or 3 currently supported");
+            }
 
             return concatenatedTensor;
         }
@@ -399,13 +442,11 @@ namespace OnnxStack.Core
             dimensions[2] += tensor2.Dimensions[2];
             var concatenatedTensor = new DenseTensor<float>(dimensions);
 
-            // Copy data from the first tensor
             for (int i = 0; i < dimensions[0]; i++)
                 for (int j = 0; j < dimensions[1]; j++)
                     for (int k = 0; k < tensor1.Dimensions[2]; k++)
                         concatenatedTensor[i, j, k] = tensor1[i, j, k];
 
-            // Copy data from the second tensor
             for (int i = 0; i < dimensions[0]; i++)
                 for (int j = 0; j < dimensions[1]; j++)
                     for (int k = 0; k < tensor2.Dimensions[2]; k++)
@@ -432,6 +473,40 @@ namespace OnnxStack.Core
         public static void NormalizeZeroOneToOneOne(this DenseTensor<float> imageTensor)
         {
             Parallel.For(0, (int)imageTensor.Length, (i) => imageTensor.SetValue(i, 2f * imageTensor.GetValue(i) - 1f));
+        }
+
+
+        /// <summary>
+        /// Pads the end dimenison by the specified length.
+        /// </summary>
+        /// <param name="tensor1">The tensor1.</param>
+        /// <param name="padLength">Length of the pad.</param>
+        /// <returns></returns>
+        public static DenseTensor<float> PadEnd(this DenseTensor<float> tensor1, int padLength)
+        {
+            var dimensions = tensor1.Dimensions.ToArray();
+            dimensions[^1] += padLength;
+            var concatenatedTensor = new DenseTensor<float>(dimensions);
+
+            if (tensor1.Dimensions.Length == 2)
+            {
+                for (int i = 0; i < tensor1.Dimensions[0]; i++)
+                    for (int j = 0; j < tensor1.Dimensions[1]; j++)
+                        concatenatedTensor[i, j] = tensor1[i, j];
+            }
+            else if (tensor1.Dimensions.Length == 3)
+            {
+                for (int i = 0; i < tensor1.Dimensions[0]; i++)
+                    for (int j = 0; j < tensor1.Dimensions[1]; j++)
+                        for (int k = 0; k < tensor1.Dimensions[2]; k++)
+                            concatenatedTensor[i, j, k] = tensor1[i, j, k];
+            }
+            else
+            {
+                throw new ArgumentException("Length 2 or 3 currently supported");
+            }
+
+            return concatenatedTensor;
         }
     }
 }
