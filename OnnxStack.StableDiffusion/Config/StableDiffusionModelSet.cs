@@ -32,10 +32,16 @@ namespace OnnxStack.StableDiffusion.Config
         public TokenizerModelConfig Tokenizer2Config { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public TokenizerModelConfig Tokenizer3Config { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public TextEncoderModelConfig TextEncoderConfig { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public TextEncoderModelConfig TextEncoder2Config { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public TextEncoderModelConfig TextEncoder3Config { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public UNetConditionModelConfig UnetConfig { get; set; }

@@ -43,6 +43,8 @@ namespace OnnxStack.UI.Services
             yield return new StableDiffusionModelTemplate("SDXL-Inpaint", DiffuserPipelineType.StableDiffusionXL, ModelType.Base, 1024, DiffuserType.ImageInpaint);
             yield return new StableDiffusionModelTemplate("SDXL-Refiner", DiffuserPipelineType.StableDiffusionXL, ModelType.Refiner, 1024, DiffuserType.ImageToImage, DiffuserType.ImageInpaintLegacy);
 
+            yield return new StableDiffusionModelTemplate("SD3", DiffuserPipelineType.StableDiffusion3, ModelType.Base, 1024, DiffuserType.TextToImage);
+
             yield return new StableDiffusionModelTemplate("LCM", DiffuserPipelineType.LatentConsistency, ModelType.Base, 512, DiffuserType.TextToImage, DiffuserType.ImageToImage, DiffuserType.ImageInpaintLegacy);
             yield return new StableDiffusionModelTemplate("LCM-SDXL", DiffuserPipelineType.LatentConsistencyXL, ModelType.Base, 1024, DiffuserType.TextToImage, DiffuserType.ImageToImage, DiffuserType.ImageInpaintLegacy);
 
@@ -86,7 +88,9 @@ namespace OnnxStack.UI.Services
             if (!File.Exists(tokenizer2Path))
                 tokenizer2Path = _defaultTokenizerPath;
 
-            if (modelSet.PipelineType == DiffuserPipelineType.StableDiffusionXL || modelSet.PipelineType == DiffuserPipelineType.LatentConsistencyXL)
+            if (modelSet.PipelineType == DiffuserPipelineType.StableDiffusionXL || 
+                modelSet.PipelineType == DiffuserPipelineType.LatentConsistencyXL ||
+                modelSet.PipelineType == DiffuserPipelineType.StableDiffusion3)
             {
                 if (modelTemplate.ModelType == ModelType.Refiner)
                 {

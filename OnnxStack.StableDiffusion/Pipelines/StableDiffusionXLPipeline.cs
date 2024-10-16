@@ -239,7 +239,7 @@ namespace OnnxStack.StableDiffusion.Pipelines
         /// </summary>
         /// <param name="inputText">The input text.</param>
         /// <returns></returns>
-        private async Task<TokenizerResult> DecodeTextAsLongAsync(string inputText)
+        protected async Task<TokenizerResult> DecodeTextAsLongAsync(string inputText)
         {
             if (string.IsNullOrEmpty(inputText))
                 return new TokenizerResult(Array.Empty<long>(), Array.Empty<long>());
@@ -299,7 +299,7 @@ namespace OnnxStack.StableDiffusion.Pipelines
         /// <param name="inputTokens">The input tokens.</param>
         /// <param name="minimumLength">The minimum length.</param>
         /// <returns></returns>
-        private async Task<PromptEmbeddingsResult> GenerateEmbedsAsync(TokenizerResult inputTokens, int minimumLength)
+        protected async Task<PromptEmbeddingsResult> GenerateEmbedsAsync(TokenizerResult inputTokens, int minimumLength)
         {
             // If less than minimumLength pad with blank tokens
             if (inputTokens.InputIds.Length < minimumLength)

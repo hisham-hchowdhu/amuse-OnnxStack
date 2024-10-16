@@ -195,6 +195,7 @@ namespace OnnxStack.UI.Services
             {
                 DiffuserPipelineType.StableDiffusion => StableDiffusionPipeline.CreatePipeline(model, _logger),
                 DiffuserPipelineType.StableDiffusionXL => StableDiffusionXLPipeline.CreatePipeline(model, _logger),
+                DiffuserPipelineType.StableDiffusion3 => StableDiffusion3Pipeline.CreatePipeline(model, _logger),
                 DiffuserPipelineType.LatentConsistency => LatentConsistencyPipeline.CreatePipeline(model, _logger),
                 DiffuserPipelineType.LatentConsistencyXL => LatentConsistencyXLPipeline.CreatePipeline(model, _logger),
                 DiffuserPipelineType.InstaFlow => InstaFlowPipeline.CreatePipeline(model, _logger),

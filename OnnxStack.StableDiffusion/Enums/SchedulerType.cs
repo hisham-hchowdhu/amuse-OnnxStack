@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace OnnxStack.StableDiffusion.Enums
 {
@@ -29,6 +30,9 @@ namespace OnnxStack.StableDiffusion.Enums
         LCM = 20,
 
         [Display(Name = "InstaFlow")]
-        InstaFlow = 21
+        InstaFlow = 21,
+
+        [Display(Name = "FlowMatchEulerDiscrete")]
+        FlowMatchEulerDiscrete = 22
     }
 }

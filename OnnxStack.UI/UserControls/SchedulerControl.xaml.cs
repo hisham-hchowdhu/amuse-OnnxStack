@@ -159,6 +159,14 @@ namespace OnnxStack.UI.UserControls
                 SchedulerOptions.SchedulerType = SchedulerType.EulerAncestral;
                 SchedulerOptions.BatchCount      = 1;
             }
+            else if (model.ModelSet.PipelineType == DiffuserPipelineType.StableDiffusion3)
+            {
+                SchedulerOptions.InferenceSteps = 28;
+                SchedulerOptions.GuidanceScale = 7f;
+                SchedulerOptions.Width = 1024;
+                SchedulerOptions.Height = 1024;
+                SchedulerOptions.SchedulerType = SchedulerType.FlowMatchEulerDiscrete;
+            }
         }
 
 
@@ -203,6 +211,11 @@ namespace OnnxStack.UI.UserControls
                         SchedulerType.DDPM,
                         SchedulerType.DDIM,
                         SchedulerType.KDPM2
+                    };
+                case DiffuserPipelineType.StableDiffusion3:
+                    return new[]
+                    {
+                        SchedulerType.FlowMatchEulerDiscrete,
                     };
                 case DiffuserPipelineType.LatentConsistency:
                 case DiffuserPipelineType.LatentConsistencyXL:
