@@ -36,6 +36,7 @@ namespace OnnxStack.UI.Models
         private ModelFileViewModel _textEncoder3Model;
         private ModelFileViewModel _textEncoder2Model;
         private ModelFileViewModel _textEncoderModel;
+        private ModelFileViewModel _tokenizer3Model;
         private ModelFileViewModel _tokenizer2Model;
         private ModelFileViewModel _tokenizerModel;
 
@@ -204,6 +205,12 @@ namespace OnnxStack.UI.Models
             set { _tokenizer2Model = value; NotifyPropertyChanged(); }
         }
 
+        public ModelFileViewModel Tokenizer3Model
+        {
+            get { return _tokenizer3Model; }
+            set { _tokenizer3Model = value; NotifyPropertyChanged(); }
+        }
+
         public ModelFileViewModel TextEncoderModel
         {
             get { return _textEncoderModel; }
@@ -343,6 +350,27 @@ namespace OnnxStack.UI.Models
                             || modelset.Tokenizer2Config.IntraOpNumThreads.HasValue
                             || modelset.Tokenizer2Config.InterOpNumThreads.HasValue
                             || modelset.Tokenizer2Config.Precision.HasValue
+                },
+
+                Tokenizer3Model = modelset.Tokenizer3Config is null ? default : new ModelFileViewModel
+                {
+                    OnnxModelPath = modelset.Tokenizer3Config.OnnxModelPath,
+                    RequiredMemory = modelset.Tokenizer3Config.RequiredMemory,
+
+                    DeviceId = modelset.Tokenizer3Config.DeviceId ?? modelset.DeviceId,
+                    ExecutionMode = modelset.Tokenizer3Config.ExecutionMode ?? modelset.ExecutionMode,
+                    ExecutionProvider = modelset.Tokenizer3Config.ExecutionProvider ?? modelset.ExecutionProvider,
+                    InterOpNumThreads = modelset.Tokenizer3Config.InterOpNumThreads ?? modelset.InterOpNumThreads,
+                    IntraOpNumThreads = modelset.Tokenizer3Config.IntraOpNumThreads ?? modelset.IntraOpNumThreads,
+                    Precision = modelset.Tokenizer3Config.Precision ?? modelset.Precision,
+
+                    IsOverrideEnabled =
+                               modelset.Tokenizer3Config.DeviceId.HasValue
+                            || modelset.Tokenizer3Config.ExecutionMode.HasValue
+                            || modelset.Tokenizer3Config.ExecutionProvider.HasValue
+                            || modelset.Tokenizer3Config.IntraOpNumThreads.HasValue
+                            || modelset.Tokenizer3Config.InterOpNumThreads.HasValue
+                            || modelset.Tokenizer3Config.Precision.HasValue
                 },
 
                 TextEncoderModel = new ModelFileViewModel
@@ -513,6 +541,22 @@ namespace OnnxStack.UI.Models
                     IntraOpNumThreads = modelset.Tokenizer2Model.IsOverrideEnabled && modelset.IntraOpNumThreads != modelset.Tokenizer2Model.IntraOpNumThreads ? modelset.Tokenizer2Model.IntraOpNumThreads : default,
                     InterOpNumThreads = modelset.Tokenizer2Model.IsOverrideEnabled && modelset.InterOpNumThreads != modelset.Tokenizer2Model.InterOpNumThreads ? modelset.Tokenizer2Model.InterOpNumThreads : default,
                     Precision = modelset.Tokenizer2Model.IsOverrideEnabled && modelset.Precision != modelset.Tokenizer2Model.Precision ? modelset.Tokenizer2Model.Precision : default,
+                },
+
+                Tokenizer3Config = modelset.Tokenizer3Model is null ? default : new TokenizerModelConfig
+                {
+                    BlankTokenId = modelset.BlankTokenId,
+                    PadTokenId = modelset.PadTokenId,
+                    TokenizerLimit = modelset.TokenizerLimit,
+                    TokenizerLength = modelset.Tokenizer2Length,
+                    OnnxModelPath = modelset.Tokenizer3Model.OnnxModelPath,
+                    RequiredMemory = modelset.Tokenizer3Model.RequiredMemory,
+                    DeviceId = modelset.Tokenizer3Model.IsOverrideEnabled && modelset.DeviceId != modelset.Tokenizer3Model.DeviceId ? modelset.Tokenizer3Model.DeviceId : default,
+                    ExecutionMode = modelset.Tokenizer3Model.IsOverrideEnabled && modelset.ExecutionMode != modelset.Tokenizer3Model.ExecutionMode ? modelset.Tokenizer3Model.ExecutionMode : default,
+                    ExecutionProvider = modelset.Tokenizer3Model.IsOverrideEnabled && modelset.ExecutionProvider != modelset.Tokenizer3Model.ExecutionProvider ? modelset.Tokenizer3Model.ExecutionProvider : default,
+                    IntraOpNumThreads = modelset.Tokenizer3Model.IsOverrideEnabled && modelset.IntraOpNumThreads != modelset.Tokenizer3Model.IntraOpNumThreads ? modelset.Tokenizer3Model.IntraOpNumThreads : default,
+                    InterOpNumThreads = modelset.Tokenizer3Model.IsOverrideEnabled && modelset.InterOpNumThreads != modelset.Tokenizer3Model.InterOpNumThreads ? modelset.Tokenizer3Model.InterOpNumThreads : default,
+                    Precision = modelset.Tokenizer3Model.IsOverrideEnabled && modelset.Precision != modelset.Tokenizer3Model.Precision ? modelset.Tokenizer3Model.Precision : default,
                 },
 
                 TextEncoderConfig = new TextEncoderModelConfig

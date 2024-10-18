@@ -274,7 +274,55 @@
 
                     </DockPanel>
 
-                    <DockPanel Margin="5">
+                    <DockPanel Margin="5" Visibility="{Binding UpdateModelSet.Tokenizer3Model, Converter={StaticResource NullVisibilityConverter}}">
+
+                        <!--File Picker-->
+                        <DockPanel DockPanel.Dock="Top">
+                            <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                                <TextBlock />
+                                <CheckBox IsChecked="{Binding UpdateModelSet.Tokenizer3Model.IsOverrideEnabled}" Content="Performance Override" Margin="5,0"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Tokenizer3 Model" />
+                                <userControls:FilePickerTextBox FileName="{Binding UpdateModelSet.Tokenizer3Model.OnnxModelPath, Mode=TwoWay}"  IsRequired="True" Filter="Onnx files (*.onnx)|*.onnx" Title="Model Selector" DefaultExt="onnx"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <!--Override Defaults-->
+                        <UniformGrid Grid.Column="0" Columns="4" Visibility="{Binding UpdateModelSet.Tokenizer3Model.IsOverrideEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,5,0,10">
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="Device" />
+                                <userControls:DevicePickerControl 
+                 UISettings="{Binding UISettings, ElementName=UI}"
+                 DeviceId="{Binding UpdateModelSet.Tokenizer3Model.DeviceId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 ExecutionProvider="{Binding UpdateModelSet.Tokenizer3Model.ExecutionProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,4,0">
+                                <TextBlock Text="Mode" />
+                                <ComboBox ItemsSource="{Binding Source={StaticResource ExecutionModeType}}" SelectedItem="{Binding UpdateModelSet.Tokenizer3Model.ExecutionMode}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,4,0">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Left" Text="InterOp Threads" />
+                                    <TextBlock Text="(0=auto)" FontSize="9" FontStyle="Italic" Margin="6,0,6,0" Opacity="0.5" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </DockPanel>
+                                <TextBox Text="{Binding UpdateModelSet.Tokenizer3Model.InterOpNumThreads}" />
+                            </StackPanel>
+                            <StackPanel>
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Left" Text="IntraOp Threads" />
+                                    <TextBlock Text="(0=auto)" FontSize="9" FontStyle="Italic" Margin="6,0,6,0" Opacity="0.5" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </DockPanel>
+                                <TextBox Text="{Binding UpdateModelSet.Tokenizer3Model.IntraOpNumThreads}" />
+                            </StackPanel>
+                        </UniformGrid>
+
+                    </DockPanel>
+
+
+                        <DockPanel Margin="5">
 
                         <!--File Picker-->
                         <DockPanel DockPanel.Dock="Top">

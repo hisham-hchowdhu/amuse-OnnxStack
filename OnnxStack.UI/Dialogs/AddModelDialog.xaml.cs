@@ -108,6 +108,8 @@ namespace OnnxStack.UI.Dialogs
             ValidationResults.Add(new ValidationResult("Tokenizer Model", File.Exists(_modelSetResult.TokenizerConfig.OnnxModelPath)));
             if (_modelSetResult.Tokenizer2Config is not null)
                 ValidationResults.Add(new ValidationResult("Tokenizer2 Model", File.Exists(_modelSetResult.Tokenizer2Config.OnnxModelPath)));
+            if (_modelSetResult.Tokenizer3Config is not null)
+                ValidationResults.Add(new ValidationResult("Tokenizer3 Model", File.Exists(_modelSetResult.Tokenizer3Config.OnnxModelPath)));
             ValidationResults.Add(new ValidationResult("TextEncoder Model", File.Exists(_modelSetResult.TextEncoderConfig.OnnxModelPath)));
             if (_modelSetResult.TextEncoder2Config is not null)
                 ValidationResults.Add(new ValidationResult("TextEncoder2 Model", File.Exists(_modelSetResult.TextEncoder2Config.OnnxModelPath)));

@@ -245,7 +245,7 @@ namespace OnnxStack.StableDiffusion.Pipelines
         /// <returns></returns>
         private async Task<DenseTensor<float>> GeneratePrompt3EmbedsAsync(TokenizerResult prompt3Tokens, int maxPromptTokenCount)
         {
-            if (prompt3Tokens is null)
+            if (prompt3Tokens is null || prompt3Tokens.InputIds.Length == 0)
                 return new DenseTensor<float>([1, Math.Max(77, maxPromptTokenCount), 4096]);
 
             var metadata = await _textEncoder3.GetMetadataAsync();

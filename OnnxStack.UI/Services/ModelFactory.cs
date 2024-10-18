@@ -81,6 +81,7 @@ namespace OnnxStack.UI.Services
             var vaeDecoder = Path.Combine(folder, "vae_decoder", "model.onnx");
             var vaeEncoder = Path.Combine(folder, "vae_encoder", "model.onnx");
             var tokenizer2Path = Path.Combine(folder, "tokenizer_2", "model.onnx");
+            var tokenizer3Path = Path.Combine(folder, "tokenizer_3", "model.onnx");
             var textEncoder2Path = Path.Combine(folder, "text_encoder_2", "model.onnx");
             var textEncoder3Path = Path.Combine(folder, "text_encoder_3", "model.onnx");
             var controlnet = Path.Combine(folder, "controlnet", "model.onnx");
@@ -90,6 +91,8 @@ namespace OnnxStack.UI.Services
                 tokenizer2Path = _defaultTokenizerPath;
             if (!File.Exists(textEncoder3Path))
                 textEncoder3Path = null;
+            if (!File.Exists(tokenizer3Path))
+                tokenizer3Path = null;
 
             if (modelSet.PipelineType == DiffuserPipelineType.StableDiffusionXL || 
                 modelSet.PipelineType == DiffuserPipelineType.LatentConsistencyXL ||
@@ -121,6 +124,8 @@ namespace OnnxStack.UI.Services
                     modelSet.UnetConfig = new UNetConditionModelConfig { OnnxModelPath = unetPath, ModelType = ModelType.Base };
                     modelSet.TokenizerConfig = new TokenizerModelConfig { OnnxModelPath = tokenizerPath, PadTokenId = 1 };
                     modelSet.Tokenizer2Config = new TokenizerModelConfig { OnnxModelPath = tokenizer2Path, TokenizerLength = 1280, PadTokenId = 1 };
+                    if (tokenizer3Path != null)
+                        modelSet.Tokenizer3Config = new TokenizerModelConfig { OnnxModelPath = tokenizer3Path, TokenizerLength = 1280, PadTokenId = 1 };
                     modelSet.TextEncoderConfig = new TextEncoderModelConfig { OnnxModelPath = textEncoderPath };
                     modelSet.TextEncoder2Config = new TextEncoderModelConfig { OnnxModelPath = textEncoder2Path };
                     if (textEncoder3Path != null)
